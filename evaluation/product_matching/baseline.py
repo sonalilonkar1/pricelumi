@@ -152,13 +152,6 @@ def match_products(a: Mapping[str, Any], b: Mapping[str, Any]) -> MatchResult:
     ba, bb = compact(a.get("brand")), compact(b.get("brand"))
     ma, mb = compact(a.get("model")), compact(b.get("model"))
     va, vb = variant_map(a), variant_map(b)
-    ba, bb = compact(a.get("brand")), compact(b.get("brand"))
-    ma, mb = compact(a.get("model")), compact(b.get("model"))
-    va, vb = variant_map(a), variant_map(b)
-    ba, bb = compact(a.get("brand")), compact(b.get("brand"))
-    ma, mb = compact(a.get("model")), compact(b.get("model"))
-    va, vb = variant_map(a), variant_map(b)
-
 
     if has_storage_conflict(a) or has_storage_conflict(b):
         return MatchResult(
@@ -167,6 +160,21 @@ def match_products(a: Mapping[str, Any], b: Mapping[str, Any]) -> MatchResult:
             "storage_data_conflict"
         )
 
+    if has_ram_conflict(a) or has_ram_conflict(b):
+        return MatchResult(
+            "uncertain",
+            "Product title contradicts structured RAM specification",
+            "ram_data_conflict"
+        )
+
+    if is_accessory(a) != is_accessory(b):
+        return MatchResult(
+            "non_match",
+            "Main product and accessory must not be merged",
+            "product_type_conflict"
+        )
+
+    # All remaining matching rules stay unchanged.
 
 
     if has_ram_conflict(a) or has_ram_conflict(b):
