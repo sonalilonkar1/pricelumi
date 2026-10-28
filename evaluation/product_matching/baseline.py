@@ -1,3 +1,4 @@
+
 """W1-25: deterministic, conservative product-offer matching baseline.
 
 Not a trained model and not a production-ready retailer data adapter.
@@ -29,29 +30,40 @@ def normalize_gtin(value: Any) -> str | None:
     """Validate GTIN-8/12/13/14 checksums; compare in zero-padded GTIN-14 form."""
     if value is None:
         return None
+
     raw = str(value).strip()
     if not re.fullmatch(r"[0-9\s-]+", raw):
         return None
+
     digits = re.sub(r"[\s-]", "", raw)
     if len(digits) not in (8, 12, 13, 14):
         return None
+
     body, check = digits[:-1], int(digits[-1])
-    score = sum(int(n) * (3 if i % 2 == 0 else 1)
-                for i, n in enumerate(reversed(body)))
+    score = sum(
+        int(n) * (3 if i % 2 == 0 else 1)
+        for i, n in enumerate(reversed(body))
+    )
+
     if (10 - score % 10) % 10 != check:
         return None
+
     return digits.zfill(14)
 
 
 def variant_map(record: Mapping[str, Any]) -> dict[str, str]:
     raw = record.get("variants") or {}
+
     if not isinstance(raw, Mapping):
         return {}
+
     result: dict[str, str] = {}
+
     for key, value in raw.items():
         k, v = compact(key), compact(value)
         if k and v:
             result[k] = v
+
     return result
 
 
@@ -142,17 +154,19 @@ def has_storage_conflict(record: Mapping[str, Any]) -> bool:
     return title_storage != structured_storage
 
 
-
 def match_products(a: Mapping[str, Any], b: Mapping[str, Any]) -> MatchResult:
     """Compare two offers; avoid confident matches when key evidence is missing.
 
     `price_usd`, `retailer` and `title` are deliberately not identity keys.
     Variant disagreements are hard negatives even when titles are similar.
     """
+
+    # Normalize identity fields once.
     ba, bb = compact(a.get("brand")), compact(b.get("brand"))
     ma, mb = compact(a.get("model")), compact(b.get("model"))
     va, vb = variant_map(a), variant_map(b)
 
+    # Check contradictory title and structured storage information.
     if has_storage_conflict(a) or has_storage_conflict(b):
         return MatchResult(
             "uncertain",
@@ -160,6 +174,7 @@ def match_products(a: Mapping[str, Any], b: Mapping[str, Any]) -> MatchResult:
             "storage_data_conflict"
         )
 
+    # Check contradictory title and structured RAM information.
     if has_ram_conflict(a) or has_ram_conflict(b):
         return MatchResult(
             "uncertain",
@@ -167,6 +182,7 @@ def match_products(a: Mapping[str, Any], b: Mapping[str, Any]) -> MatchResult:
             "ram_data_conflict"
         )
 
+    # Prevent accessories from being merged with main products.
     if is_accessory(a) != is_accessory(b):
         return MatchResult(
             "non_match",
@@ -174,57 +190,85 @@ def match_products(a: Mapping[str, Any], b: Mapping[str, Any]) -> MatchResult:
             "product_type_conflict"
         )
 
-    # All remaining matching rules stay unchanged.
-
-
-    if has_ram_conflict(a) or has_ram_conflict(b):
-        return MatchResult(
-            "uncertain",
-            "Product title contradicts structured RAM specification",
-            "ram_data_conflict"
-        )
-
-
-
-    if is_accessory(a) != is_accessory(b):
-        return MatchResult(
-            "non_match",
-            "Main product and accessory must not be merged",
-            "product_type_conflict"
-        )
-
-
+    # Reject conflicting brands and models.
     if ba and bb and ba != bb:
         return MatchResult("non_match", "Brand differs", "brand")
+
     if ma and mb and ma != mb:
         return MatchResult("non_match", "Model differs", "model")
 
+    # Reject conflicting variant attributes.
     for field in sorted(va.keys() & vb.keys()):
         if va[field] != vb[field]:
-            return MatchResult("non_match", f"Variant '{field}' differs", "variant_conflict")
+            return MatchResult(
+                "non_match",
+                f"Variant '{field}' differs",
+                "variant_conflict"
+            )
 
+    # Normalize product identifiers.
     ga, gb = normalize_gtin(a.get("gtin")), normalize_gtin(b.get("gtin"))
     pa, pb = compact(a.get("mpn")), compact(b.get("mpn"))
 
-    # Conflicting authoritative-looking identifiers are not overridden by a
-    # similar title or model. MPN is only meaningful with an agreed brand.
+    # Conflicting authoritative-looking identifiers require review.
+    # MPN is only meaningful with an agreed brand.
     if ga and gb and ga != gb:
-        return MatchResult("uncertain", "Both valid GTINs differ; needs review", "gtin_conflict")
-    if ba and bb and pa and pb and pa != pb:
-        return MatchResult("uncertain", "Manufacturer part numbers differ", "mpn_conflict")
-    if ga and gb and ga == gb:
-        return MatchResult("match", "Validated GTIN matches with no observed conflicts", "gtin")
-    if ba and bb and ba == bb and pa and pb and pa == pb:
-        return MatchResult("match", "Brand and MPN match with no observed conflicts", "brand_mpn")
+        return MatchResult(
+            "uncertain",
+            "Both valid GTINs differ; needs review",
+            "gtin_conflict"
+        )
 
-    # When exact IDs aren't available, require full variant coverage on both
-    # sides (no missing-on-one-side attributes), and at least one informative
-    # variant besides condition. More permissive matching can be added later
-    # after evaluating real retailer data.
+    if ba and bb and pa and pb and pa != pb:
+        return MatchResult(
+            "uncertain",
+            "Manufacturer part numbers differ",
+            "mpn_conflict"
+        )
+
+    # Match using validated GTIN.
+    if ga and gb and ga == gb:
+        return MatchResult(
+            "match",
+            "Validated GTIN matches with no observed conflicts",
+            "gtin"
+        )
+
+    # Match using brand-scoped manufacturer part numbers.
+    if ba and bb and ba == bb and pa and pb and pa == pb:
+        return MatchResult(
+            "match",
+            "Brand and MPN match with no observed conflicts",
+            "brand_mpn"
+        )
+
+    # Fallback when exact product identifiers are unavailable.
+    # Require compatible brand and model.
     if not (ba and bb and ba == bb and ma and mb and ma == mb):
-        return MatchResult("uncertain", "Insufficient brand/model identity fields", "missing_identity")
+        return MatchResult(
+            "uncertain",
+            "Insufficient brand/model identity fields",
+            "missing_identity"
+        )
+
+    # Require symmetric variant attribute coverage.
     if va.keys() != vb.keys():
-        return MatchResult("uncertain", "Variant attributes are incomplete", "missing_variant")
+        return MatchResult(
+            "uncertain",
+            "Variant attributes are incomplete",
+            "missing_variant"
+        )
+
+    # Require at least one identifying variant besides condition.
     if not (va.keys() - {"condition"}):
-        return MatchResult("uncertain", "No identifying variant attributes", "weak_attributes")
-    return MatchResult("match", "Normalized brand, model and variants match", "attributes")
+        return MatchResult(
+            "uncertain",
+            "No identifying variant attributes",
+            "weak_attributes"
+        )
+
+    return MatchResult(
+        "match",
+        "Normalized brand, model and variants match",
+        "attributes"
+    )
