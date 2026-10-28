@@ -110,3 +110,5 @@ to delete the local database data.
 | `python3 -B -m unittest discover -s infra/scripts -p test_setup_local.py -v` | Tests the setup helper without starting database services |
 
 See [Validation results](docs/infra-validation.md) for completed checks and limitations.
+
+See [Infrastructure CI](docs/ci.md) for automated checks and troubleshooting.

@@ -1,0 +1,104 @@
+name: Infrastructure CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, 'feature/W1-22-ci']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: infrastructure-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  infrastructure-checks:
+    name: Infrastructure checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Test local setup helper
+        run: python3 -B -m unittest discover -s infra/scripts -p test_setup_local.py -v
+
+      - name: Validate Compose configuration
+        run: docker compose --env-file .env.example config --quiet
+
+      - name: Check shell script syntax
+        run: sh -n infra/scripts/check-db.sh
+
+  postgres-integration:
+    name: PostgreSQL integration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends postgresql-client
+
+      - name: Check required tools
+        run: |
+          python3 --version
+          docker compose version
+          docker info --format '{{.ServerVersion}}'
+          psql --version
+
+      - name: Test isolated PostgreSQL setup
+        run: python3 -u infra/scripts/check-fresh-start.py
+
+  secret-scanning:
+    name: Secret scanning
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Install gitleaks 8.30.1
+        working-directory: ${{ runner.temp }}
+        run: |
+          curl --fail --silent --show-error --location --retry 2 --connect-timeout 10 --max-time 60 \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz -o gitleaks_8.30.1_linux_x64.tar.gz
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  gitleaks_8.30.1_linux_x64.tar.gz" | sha256sum --check
+          mkdir -p ci-tools
+          tar -xzf gitleaks_8.30.1_linux_x64.tar.gz -C ci-tools gitleaks
+
+      - name: Secret scanning
+        run: '"$RUNNER_TEMP/ci-tools/gitleaks" git --redact=100 --no-banner --log-opts="HEAD" .'
+
+  workflow-validation:
+    name: Workflow validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install actionlint 1.7.12
+        working-directory: ${{ runner.temp }}
+        run: |
+          curl --fail --silent --show-error --location --retry 2 --connect-timeout 10 --max-time 60 \
+            https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz -o actionlint_1.7.12_linux_amd64.tar.gz
+          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  actionlint_1.7.12_linux_amd64.tar.gz" | sha256sum --check
+          mkdir -p ci-tools
+          tar -xzf actionlint_1.7.12_linux_amd64.tar.gz -C ci-tools actionlint
+
+      - name: Workflow validation
+        run: '"$RUNNER_TEMP/ci-tools/actionlint" -color -shellcheck=""'
