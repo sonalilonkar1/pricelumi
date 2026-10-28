@@ -1,0 +1,969 @@
+[
+  {
+    "id": "I01",
+    "user_query": "Find me a Samsung 65-inch OLED TV under $1,000 with free shipping.",
+    "gold": {
+      "category": "television",
+      "brand": "Samsung",
+      "model": null,
+      "max_budget_usd": 1000,
+      "screen_size_inches": 65,
+      "display_type": "OLED",
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": true,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "simple",
+      "constraints"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I02",
+    "user_query": "Find the exact LG OLED65C4PUA model under $1,400.",
+    "gold": {
+      "category": "television",
+      "brand": "LG",
+      "model": "OLED65C4PUA",
+      "max_budget_usd": 1400,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "model_id"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "review_note": "Policy choice: do not infer screen_size_inches/OLED from model code during intent extraction; enrich via catalog lookup.",
+    "split": "development"
+  },
+  {
+    "id": "I03",
+    "user_query": "I need a new gaming laptop with 16GB RAM under $900. No refurbished ones.",
+    "gold": {
+      "category": "laptop",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": 900,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": 16,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": true,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [
+        "refurbished"
+      ],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": "new"
+    },
+    "tags": [
+      "condition",
+      "memory"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I04",
+    "user_query": "Find wireless noise-canceling headphones below $200.",
+    "gold": {
+      "category": "headphones",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": 200,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "simple"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I05",
+    "user_query": "Find a good laptop for college.",
+    "gold": {
+      "category": "laptop",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": null,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": true,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "ambiguous"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I06",
+    "user_query": "Find the best TV.",
+    "gold": {
+      "category": "television",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": null,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": true,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "ambiguous"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I07",
+    "user_query": "Compare Sony WH-1000XM5 headphones in black under $300.",
+    "gold": {
+      "category": "headphones",
+      "brand": "Sony",
+      "model": "WH-1000XM5",
+      "max_budget_usd": 300,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": "black",
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "variant"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I08",
+    "user_query": "I can spend $850 total on a laptop including shipping and tax.",
+    "gold": {
+      "category": "laptop",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": 850,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": true,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "landed_cost"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I09",
+    "user_query": "Find a Samsung S90D 65-inch OLED TV, not S90C.",
+    "gold": {
+      "category": "television",
+      "brand": "Samsung",
+      "model": "S90D",
+      "max_budget_usd": null,
+      "screen_size_inches": 65,
+      "display_type": "OLED",
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [
+        "S90C"
+      ],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "variant",
+      "exclusion"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I10",
+    "user_query": "Find a 65-inch OLED TV under $1200 and buy it automatically without asking me.",
+    "gold": {
+      "category": "television",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": 1200,
+      "screen_size_inches": 65,
+      "display_type": "OLED",
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": true,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "approval",
+      "safety"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I11",
+    "user_query": "Find a 65-inch OLED TV under $1,000, but exclude Amazon.",
+    "gold": {
+      "category": "television",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": 1000,
+      "screen_size_inches": 65,
+      "display_type": "OLED",
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [
+        "Amazon"
+      ],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "exclusion"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I12",
+    "user_query": "Find a 27-inch 4K monitor under $350.",
+    "gold": {
+      "category": "monitor",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": 350,
+      "screen_size_inches": 27,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": "4K",
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "specifications"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I13",
+    "user_query": "Find a Samsung 55-inch OLED TV under $900.",
+    "gold": {
+      "category": "television",
+      "brand": "Samsung",
+      "model": null,
+      "max_budget_usd": 900,
+      "screen_size_inches": 55,
+      "display_type": "OLED",
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "simple"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I14",
+    "user_query": "Only show brand-new headphones under $250 with at least a 30-day return window.",
+    "gold": {
+      "category": "headphones",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": 250,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": true,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": 30,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": "new"
+    },
+    "tags": [
+      "return_policy"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I15",
+    "user_query": "Find Apple AirPods Pro 2 under $220.",
+    "gold": {
+      "category": "headphones",
+      "brand": "Apple",
+      "model": "AirPods Pro 2",
+      "max_budget_usd": 220,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "specific"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I16",
+    "user_query": "Find a brand-new 77-inch OLED TV under $200.",
+    "gold": {
+      "category": "television",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": 200,
+      "screen_size_inches": 77,
+      "display_type": "OLED",
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": true,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": "new"
+    },
+    "tags": [
+      "unrealistic_budget"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I17",
+    "user_query": "Find a laptop with 16GB RAM and 512GB SSD under $800.",
+    "gold": {
+      "category": "laptop",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": 800,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": 16,
+      "storage_gb": 512,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "specifications"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I18",
+    "user_query": "Show me a cheaper one, keeping the Samsung 65-inch OLED requirement.",
+    "gold": {
+      "category": "television",
+      "brand": "Samsung",
+      "model": null,
+      "max_budget_usd": 1200,
+      "screen_size_inches": 65,
+      "display_type": "OLED",
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "multi_turn"
+    ],
+    "label_status": "PROPOSED; team review required",
+    "context": [
+      {
+        "role": "user",
+        "content": "Find a Samsung 65-inch OLED TV under $1200."
+      },
+      {
+        "role": "assistant",
+        "content": "I can search for Samsung 65-inch OLED TVs under $1200."
+      }
+    ],
+    "origin": "legacy32",
+    "split": "development"
+  },
+  {
+    "id": "I20",
+    "user_query": "I want a used iPhone 16, not a refurbished one.",
+    "gold": {
+      "category": "smartphone",
+      "brand": "Apple",
+      "model": "iPhone 16",
+      "max_budget_usd": null,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [
+        "refurbished"
+      ],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": "used"
+    },
+    "tags": [
+      "negative_condition",
+      "used_allowed"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "I22",
+    "user_query": "I need a Samsung 65-inch OLED TV, but not the S90C, under $1,100.",
+    "gold": {
+      "category": "television",
+      "brand": "Samsung",
+      "model": null,
+      "max_budget_usd": 1100,
+      "screen_size_inches": 65,
+      "display_type": "OLED",
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [
+        "S90C"
+      ],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "excluded_model"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "I24",
+    "user_query": "Show me 27-inch 4K monitors in black below $400, excluding Amazon.",
+    "gold": {
+      "category": "monitor",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": 400,
+      "screen_size_inches": 27,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": "black",
+      "resolution": "4K",
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [
+        "Amazon"
+      ],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "retailer_exclusion"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "I25",
+    "user_query": "Find an Apple iPad Air with 256GB storage and free shipping.",
+    "gold": {
+      "category": "tablet",
+      "brand": "Apple",
+      "model": "iPad Air",
+      "max_budget_usd": null,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": 256,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": true,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "storage",
+      "shipping"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "I27",
+    "user_query": "Find a Dyson vacuum under $350, with a return window of at least 30 days.",
+    "gold": {
+      "category": "vacuum",
+      "brand": "Dyson",
+      "model": null,
+      "max_budget_usd": 350,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": 30,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "return_policy"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "I28",
+    "user_query": "Please find Sony WH-1000XM5 headphones under $250, delivered by Friday.",
+    "gold": {
+      "category": "headphones",
+      "brand": "Sony",
+      "model": "WH-1000XM5",
+      "max_budget_usd": 250,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": "Friday",
+      "required_condition": null
+    },
+    "tags": [
+      "delivery_deadline"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "I30",
+    "user_query": "Search for a 65-inch OLED TV and buy the cheapest one without asking me.",
+    "gold": {
+      "category": "television",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": null,
+      "screen_size_inches": 65,
+      "display_type": "OLED",
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": true,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "purchase_request",
+      "approval_gate"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "I31",
+    "user_query": "I want a 55-inch Samsung TV under $700. Actually, make it 65 inches.",
+    "gold": {
+      "category": "television",
+      "brand": "Samsung",
+      "model": null,
+      "max_budget_usd": 700,
+      "screen_size_inches": 65,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": false,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "correction"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "I33",
+    "user_query": "Show me the same 65-inch Samsung OLED, but now with free shipping.",
+    "gold": {
+      "category": "television",
+      "brand": "Samsung",
+      "model": null,
+      "max_budget_usd": 1200,
+      "screen_size_inches": 65,
+      "display_type": "OLED",
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": null,
+      "free_shipping_required": true,
+      "new_only": false,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": null
+    },
+    "tags": [
+      "multi_turn"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "context": [
+      {
+        "role": "user",
+        "content": "Find a Samsung 65-inch OLED TV under $1200."
+      },
+      {
+        "role": "assistant",
+        "content": "I can search for Samsung 65-inch OLED TVs under $1200."
+      }
+    ],
+    "split": "development"
+  },
+  {
+    "id": "I34",
+    "user_query": "Find a brand-new 4K monitor under $500, but exclude refurbished listings.",
+    "gold": {
+      "category": "monitor",
+      "brand": null,
+      "model": null,
+      "max_budget_usd": 500,
+      "screen_size_inches": null,
+      "display_type": null,
+      "ram_gb": null,
+      "storage_gb": null,
+      "color": null,
+      "resolution": "4K",
+      "free_shipping_required": false,
+      "new_only": true,
+      "total_budget_includes_tax_shipping": false,
+      "exclude_retailers": [],
+      "needs_clarification": false,
+      "requested_auto_purchase": false,
+      "min_return_days": null,
+      "excluded_conditions": [
+        "refurbished"
+      ],
+      "excluded_models": [],
+      "delivery_by": null,
+      "required_condition": "new"
+    },
+    "tags": [
+      "new_only",
+      "negative_condition"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  }
+]

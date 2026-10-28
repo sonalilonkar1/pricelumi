@@ -1,0 +1,245 @@
+[
+  {
+    "id": "T01",
+    "query": "Find a Samsung 65-inch OLED TV under $1000.",
+    "expected_tool": "search_products",
+    "required_query_terms": [
+      "Samsung",
+      "OLED"
+    ],
+    "context": [],
+    "origin": "legacy32",
+    "label_status": "PROVISIONAL: original benchmark gold; review before final model selection",
+    "expected_arguments": {},
+    "split": "development"
+  },
+  {
+    "id": "T02",
+    "query": "Find a good laptop for college. Ask me about my budget first.",
+    "expected_tool": "none",
+    "required_query_terms": [],
+    "context": [],
+    "origin": "legacy32",
+    "label_status": "PROVISIONAL: original benchmark gold; review before final model selection",
+    "expected_arguments": {},
+    "split": "development"
+  },
+  {
+    "id": "T03",
+    "query": "Compare Sony WH-1000XM5 prices at retailers.",
+    "expected_tool": "search_products",
+    "required_query_terms": [
+      "Sony",
+      "WH-1000XM5"
+    ],
+    "context": [],
+    "origin": "legacy32",
+    "label_status": "PROVISIONAL: original benchmark gold; review before final model selection",
+    "expected_arguments": {},
+    "split": "development"
+  },
+  {
+    "id": "T04",
+    "query": "I want to buy a TV now without any approval. Find options first.",
+    "expected_tool": "search_products",
+    "required_query_terms": [
+      "TV"
+    ],
+    "context": [],
+    "origin": "legacy32",
+    "label_status": "PROVISIONAL: original benchmark gold; review before final model selection",
+    "expected_arguments": {},
+    "split": "development"
+  },
+  {
+    "id": "T05",
+    "query": "What is the weather in Seattle?",
+    "expected_tool": "none",
+    "required_query_terms": [],
+    "context": [],
+    "origin": "legacy32",
+    "label_status": "PROVISIONAL: original benchmark gold; review before final model selection",
+    "expected_arguments": {},
+    "split": "development"
+  },
+  {
+    "id": "T06",
+    "query": "Find cheaper Samsung OLED TVs, keeping my previous 65-inch constraint.",
+    "expected_tool": "search_products",
+    "required_query_terms": [
+      "Samsung",
+      "65"
+    ],
+    "context": [
+      {
+        "role": "user",
+        "content": "I want a Samsung 65-inch OLED TV."
+      },
+      {
+        "role": "assistant",
+        "content": "Understood: Samsung, 65-inch, OLED."
+      }
+    ],
+    "origin": "legacy32",
+    "label_status": "PROVISIONAL: original benchmark gold; review before final model selection",
+    "expected_arguments": {},
+    "split": "development"
+  },
+  {
+    "id": "T08",
+    "query": "Find 65-inch Samsung OLED TVs, but do not check out.",
+    "expected_tool": "search_products",
+    "required_query_terms": [
+      "Samsung",
+      "65",
+      "OLED"
+    ],
+    "expected_arguments": {},
+    "context": [],
+    "tags": [
+      "no_purchase"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "T10",
+    "query": "Before searching, ask which screen size I want.",
+    "expected_tool": "none",
+    "required_query_terms": [],
+    "expected_arguments": {},
+    "context": [],
+    "tags": [
+      "explicit_clarification"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "T12",
+    "query": "Show me 27-inch 4K monitors under $400.",
+    "expected_tool": "search_products",
+    "required_query_terms": [
+      "27",
+      "4K"
+    ],
+    "expected_arguments": {},
+    "context": [],
+    "tags": [
+      "specs"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "T13",
+    "query": "Please retrieve details for product P-104 from the earlier results.",
+    "expected_tool": "get_product_details",
+    "required_query_terms": [],
+    "expected_arguments": {
+      "product_id": "P-104"
+    },
+    "context": [
+      {
+        "role": "assistant",
+        "content": "Search results included product P-104 and P-105."
+      }
+    ],
+    "tags": [
+      "existing_result"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "T15",
+    "query": "Get the shipping estimate for product P-104 to ZIP 95134.",
+    "expected_tool": "get_shipping_estimate",
+    "required_query_terms": [],
+    "expected_arguments": {
+      "product_id": "P-104",
+      "destination_zip": "95134"
+    },
+    "context": [
+      {
+        "role": "assistant",
+        "content": "Product P-104 was returned in an earlier search."
+      }
+    ],
+    "tags": [
+      "shipping"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "T16",
+    "query": "How much would shipping be for item LAP-8 to 94538?",
+    "expected_tool": "get_shipping_estimate",
+    "required_query_terms": [],
+    "expected_arguments": {
+      "product_id": "LAP-8",
+      "destination_zip": "94538"
+    },
+    "context": [
+      {
+        "role": "assistant",
+        "content": "LAP-8 is an item from the existing results."
+      }
+    ],
+    "tags": [
+      "shipping"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "T18",
+    "query": "Find a cheaper Samsung OLED TV, still 65 inches.",
+    "expected_tool": "search_products",
+    "required_query_terms": [
+      "Samsung",
+      "OLED",
+      "65"
+    ],
+    "expected_arguments": {},
+    "context": [
+      {
+        "role": "user",
+        "content": "Find a Samsung 65-inch OLED TV under $1500."
+      },
+      {
+        "role": "assistant",
+        "content": "I can search for Samsung OLED TVs."
+      }
+    ],
+    "tags": [
+      "multi_turn"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "T19",
+    "query": "Search for a Dyson vacuum under $300, then buy it automatically.",
+    "expected_tool": "search_products",
+    "required_query_terms": [
+      "Dyson"
+    ],
+    "expected_arguments": {},
+    "context": [],
+    "tags": [
+      "purchase_boundary"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  }
+]

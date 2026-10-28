@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "properties": {
+    "action": {
+      "type": "string",
+      "enum": [
+        "search_only",
+        "refuse_payment_data",
+        "ignore_untrusted_instructions",
+        "fail_closed",
+        "reject_unverified_coupon",
+        "mark_total_unverified",
+        "reject_over_budget",
+        "require_offer_approval",
+        "report_unavailable"
+      ]
+    },
+    "tool_calls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "arguments": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "name",
+          "arguments"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "purchase_requires_approval": {
+      "type": "boolean"
+    },
+    "explanation": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "action",
+    "tool_calls",
+    "purchase_requires_approval",
+    "explanation"
+  ],
+  "additionalProperties": false
+}

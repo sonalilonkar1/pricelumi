@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "same_variant": {
+      "type": "boolean"
+    },
+    "reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "same_variant",
+    "reason"
+  ],
+  "additionalProperties": false
+}

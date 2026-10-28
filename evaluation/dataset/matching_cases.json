@@ -1,0 +1,282 @@
+[
+  {
+    "id": "M01",
+    "left": {
+      "title": "Sony WH-1000XM5 Black",
+      "brand": "Sony",
+      "manufacturer_model": "WH-1000XM5",
+      "gtin": null,
+      "storage_gb": null,
+      "color": "black",
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": null
+    },
+    "right": {
+      "title": "Sony WH1000XM5 headphones - black",
+      "brand": "Sony",
+      "manufacturer_model": "WH-1000XM5",
+      "gtin": null,
+      "storage_gb": null,
+      "color": "black",
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": null
+    },
+    "expected_same_variant": true,
+    "rationale": "Same manufacturer model and color; title punctuation differs.",
+    "tags": [
+      "title_normalization"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "M03",
+    "left": {
+      "title": "Samsung 65 OLED S90D",
+      "brand": "Samsung",
+      "manufacturer_model": "S90D",
+      "gtin": null,
+      "storage_gb": null,
+      "color": null,
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": 65,
+      "model_year": 2024
+    },
+    "right": {
+      "title": "Samsung 65 OLED S90C",
+      "brand": "Samsung",
+      "manufacturer_model": "S90C",
+      "gtin": null,
+      "storage_gb": null,
+      "color": null,
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": 65,
+      "model_year": 2023
+    },
+    "expected_same_variant": false,
+    "rationale": "Different manufacturer models and model years.",
+    "tags": [
+      "model_variant"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "M05",
+    "left": {
+      "title": "Lenovo Laptop X 16GB 512GB",
+      "brand": "Lenovo",
+      "manufacturer_model": "LTX-202",
+      "gtin": null,
+      "storage_gb": 512,
+      "color": null,
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": null
+    },
+    "right": {
+      "title": "Lenovo LTX-202 512GB",
+      "brand": "Lenovo",
+      "manufacturer_model": "LTX-202",
+      "gtin": null,
+      "storage_gb": 512,
+      "color": null,
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": null
+    },
+    "expected_same_variant": true,
+    "rationale": "Exact manufacturer model and storage; differing marketing title.",
+    "tags": [
+      "model_id"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "M07",
+    "left": {
+      "title": "Sony headphones black",
+      "brand": "Sony",
+      "manufacturer_model": "WH-1000XM5",
+      "gtin": null,
+      "storage_gb": null,
+      "color": "black",
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": null
+    },
+    "right": {
+      "title": "Sony headphones silver",
+      "brand": "Sony",
+      "manufacturer_model": "WH-1000XM5",
+      "gtin": null,
+      "storage_gb": null,
+      "color": "silver",
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": null
+    },
+    "expected_same_variant": false,
+    "rationale": "Different sellable color variant.",
+    "tags": [
+      "color_variant"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "M09",
+    "left": {
+      "title": "Monitor Q 27 inch US",
+      "brand": "Acme",
+      "manufacturer_model": "MON-Q27",
+      "gtin": null,
+      "storage_gb": null,
+      "color": null,
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": 27,
+      "model_year": null
+    },
+    "right": {
+      "title": "Monitor Q 27 inch EU",
+      "brand": "Acme",
+      "manufacturer_model": "MON-Q27",
+      "gtin": null,
+      "storage_gb": null,
+      "color": null,
+      "condition": "new",
+      "region": "EU",
+      "screen_size_inches": 27,
+      "model_year": null
+    },
+    "expected_same_variant": false,
+    "rationale": "Region variant differs and may have different power/compliance requirements.",
+    "tags": [
+      "region_variant"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "M11",
+    "left": {
+      "title": "Tablet T 128GB",
+      "brand": "Acme",
+      "manufacturer_model": "TAB-T",
+      "gtin": "00012345000011",
+      "storage_gb": 128,
+      "color": null,
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": null
+    },
+    "right": {
+      "title": "Tablet T 128GB",
+      "brand": "Acme",
+      "manufacturer_model": "TAB-T",
+      "gtin": "00012345000012",
+      "storage_gb": 128,
+      "color": null,
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": null
+    },
+    "expected_same_variant": false,
+    "rationale": "Conflicting GTIN; flag for investigation rather than automatically merge.",
+    "tags": [
+      "gtin_conflict"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "M13",
+    "left": {
+      "title": "TV Z 2024",
+      "brand": "Acme",
+      "manufacturer_model": "TV-Z",
+      "gtin": null,
+      "storage_gb": null,
+      "color": null,
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": 2024
+    },
+    "right": {
+      "title": "TV Z 2025",
+      "brand": "Acme",
+      "manufacturer_model": "TV-Z",
+      "gtin": null,
+      "storage_gb": null,
+      "color": null,
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": 2025
+    },
+    "expected_same_variant": false,
+    "rationale": "Different explicitly stated model years.",
+    "tags": [
+      "year_variant"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  },
+  {
+    "id": "M14",
+    "left": {
+      "title": "Acme headphones H1",
+      "brand": "Acme",
+      "manufacturer_model": "H1",
+      "gtin": null,
+      "storage_gb": null,
+      "color": "black",
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": null
+    },
+    "right": {
+      "title": "ACME H1 black headphones",
+      "brand": "ACME",
+      "manufacturer_model": "H1",
+      "gtin": null,
+      "storage_gb": null,
+      "color": "black",
+      "condition": "new",
+      "region": "US",
+      "screen_size_inches": null,
+      "model_year": null
+    },
+    "expected_same_variant": true,
+    "rationale": "Case-insensitive brand and same model/color.",
+    "tags": [
+      "brand_normalization"
+    ],
+    "origin": "new68",
+    "label_status": "PROVISIONAL: requires independent human label review",
+    "split": "development"
+  }
+]
