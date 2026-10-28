@@ -1,7 +1,13 @@
+
+# Python
 __pycache__/
 *.pyc
 .venv/
+
+# Environment variables and secrets
 .env
 .env.*
 !.env.example
+
+# macOS
 .DS_Store
