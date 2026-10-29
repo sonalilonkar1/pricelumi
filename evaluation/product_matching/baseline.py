@@ -67,18 +67,53 @@ def variant_map(record: Mapping[str, Any]) -> dict[str, str]:
     return result
 
 
-def is_accessory(record: Mapping[str, Any]) -> bool:
-    """Detect explicitly described accessories in product titles."""
+def offer_kind(record: Mapping[str, Any]) -> str:
+    """Conservatively classify an offer as product, accessory, or bundle.
+
+    Heuristics intentionally recognize *explicit* language only. Ambiguous
+    accessory types and bundle contents still require structured retailer data.
+    """
     title = str(record.get("title") or "").casefold()
 
-    accessory_phrases = (
-        "carrying case",
-        "protective case",
-        "replacement ear pads",
-        "replacement earpads",
+    # Check bundles first: "phone with protective case" is not a standalone case.
+    bundle_patterns = (
+        r"\b(?:bundle|bundled|combo|value pack|starter kit)\b",
+        r"\b(?:[2-9][ -]?pack|pack of [2-9]|multi[ -]?pack)\b",
+        r"\b(?:with|includes?|plus)\s+(?:an?\s+|the\s+)?"
+        r"(?:extra\s+|spare\s+)?(?:carrying case|protective case|"
+        r"screen protector|memory card|tripod|ear pads|earpads|"
+        r"watch strap|charger|charging cable|power adapter|"
+        r"usb[ -]?c cable|lens cap)\b",
     )
+    if any(re.search(pattern, title) for pattern in bundle_patterns):
+        return "bundle"
 
-    return any(phrase in title for phrase in accessory_phrases)
+    accessory_patterns = (
+        r"\b(?:carrying case|protective case|phone case|tablet case|"
+        r"laptop sleeve|screen protector|tempered glass|"
+        r"replacement ear pads|replacement earpads|"
+        r"replacement charger|charging cable|charging dock|"
+        r"power adapter|usb[ -]?c cable|camera strap|watch strap|"
+        r"lens cap|lens cover|battery case)\b",
+        r"\b(?:replacement|spare)\s+(?:battery|charger|cable|"
+        r"adapter|ear pads|earpads|strap|remote|lens cap)\b",
+        r"\b(?:case|cover|sleeve|stand|mount|charger|adapter|"
+        r"cable|protector)\s+(?:for|compatible with)\b",
+    )
+    if any(re.search(pattern, title) for pattern in accessory_patterns):
+        return "accessory"
+
+    return "product"
+
+
+def is_accessory(record: Mapping[str, Any]) -> bool:
+    """Recognize explicitly described standalone accessories."""
+    return offer_kind(record) == "accessory"
+
+
+def is_bundle(record: Mapping[str, Any]) -> bool:
+    """Recognize explicitly described bundles and multi-packs."""
+    return offer_kind(record) == "bundle"
 
 
 def extract_title_ram(title: str) -> int | None:
@@ -191,6 +226,22 @@ def match_products(a: Mapping[str, Any], b: Mapping[str, Any]) -> MatchResult:
         )
 
     # Reject conflicting brands and models.
+    # Bundles may include additional products that are not represented in variants.
+    # Different offer types must not be grouped; even two bundles remain uncertain
+    # until their contents can be compared through structured attributes.
+    if is_bundle(a) != is_bundle(b):
+        return MatchResult(
+            "uncertain",
+            "Bundle and standalone offer require separate review",
+            "bundle_conflict"
+        )
+    if is_bundle(a) and is_bundle(b):
+        return MatchResult(
+            "uncertain",
+            "Bundle contents are not independently verified",
+            "bundle_contents_unverified"
+        )
+
     if ba and bb and ba != bb:
         return MatchResult("non_match", "Brand differs", "brand")
 
@@ -226,6 +277,15 @@ def match_products(a: Mapping[str, Any], b: Mapping[str, Any]) -> MatchResult:
             "mpn_conflict"
         )
 
+    # Do not merge offers when a variant field is missing from one side.
+    if va.keys() != vb.keys():
+        return MatchResult(
+            "uncertain",
+            "Variant attributes are incomplete",
+            "missing_variant"
+        )
+
+
     # Match using validated GTIN.
     if ga and gb and ga == gb:
         return MatchResult(
@@ -249,14 +309,6 @@ def match_products(a: Mapping[str, Any], b: Mapping[str, Any]) -> MatchResult:
             "uncertain",
             "Insufficient brand/model identity fields",
             "missing_identity"
-        )
-
-    # Require symmetric variant attribute coverage.
-    if va.keys() != vb.keys():
-        return MatchResult(
-            "uncertain",
-            "Variant attributes are incomplete",
-            "missing_variant"
         )
 
     # Require at least one identifying variant besides condition.

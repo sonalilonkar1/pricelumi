@@ -3,28 +3,20 @@
   "total_pairs": 32,
   "confusion_matrix": {
     "tp": 12,
-    "fp": 2,
+    "fp": 1,
     "fn": 2,
-    "tn": 16
+    "tn": 17
   },
-  "precision": 0.8571,
+  "precision": 0.9231,
   "recall": 0.8571,
-  "f1": 0.8571,
+  "f1": 0.8889,
   "automatic_match_coverage": 0.9688,
   "decisions": {
-    "match": 14,
-    "non_match": 17,
+    "match": 13,
+    "non_match": 18,
     "uncertain": 1
   },
   "errors_and_uncertain": [
-    {
-      "pair_id": "stress_holdout_accessory",
-      "true_label": 0,
-      "prediction": "match",
-      "reason": "Normalized brand, model and variants match",
-      "evidence": "attributes",
-      "error_type": "fp"
-    },
     {
       "pair_id": "stress_holdout_missing_model",
       "true_label": 1,
@@ -52,3 +44,4 @@
   ],
   "caveat": "Entirely synthetic data; not evidence of live-API performance."
 }
+

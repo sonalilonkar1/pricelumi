@@ -1,131 +1,181 @@
-# W1-25 — Product-matching baseline and embedding feasibility
 
-**Status:** Initial synthetic-fixture implementation and evaluation; real retailer validation pending.
+# W1-25 — Product-Matching Baseline and Embedding Feasibility
+
+**Status:** Initial synthetic-fixture baseline implemented and tested. Original holdout retained for diagnostic use only; independent real-retailer validation pending.
 
 ## Goal
 
-Determine whether validated product identifiers plus normalized brand/model/variant comparisons are sufficiently reliable for the ShopAgent MVP before introducing BGE-M3 or a reranker.
+Determine whether validated product identifiers and normalized brand, model, and variant comparisons are sufficiently reliable for the ShopAgent/PriceLumi MVP before introducing BGE-M3 embeddings or a reranker.
 
-## Scope and provisional identity policy
+## Scope and Provisional Identity Policy
 
-- **Exact purchasable listing identity**: same brand, model, relevant product variant and condition. Compare prices *only after* grouping equivalent offers.
-- Same parent product but different memory, storage, color, connector, edition or condition is conservatively a **non-match** for automatic price grouping.
-- Empty or contradictory identifiers/attributes may require **uncertain / review**, rather than a forced match.
-- **Team decision outstanding:** Whether to group color variants and refurbished condition as the same canonical product with separate offers. This may change label policy.
+- **Exact purchasable-offer equivalence:** Group offers only when their brand, model, relevant product variant, and condition are compatible. Compare prices **after** determining that the offers are equivalent.
+- **Different variants are not interchangeable:** Explicit disagreements in memory, storage, color, connector, edition, or condition result in `non_match` for automatic price grouping.
+- **Missing information requires caution:** If an identifying variant field is present on one side but missing on the other, return `uncertain`, including when GTINs or brand-scoped MPNs match.
+- **Contradictory identifiers require review:** Conflicting valid GTINs or brand-scoped MPNs yield `uncertain` unless a stronger incompatibility has already been established.
+- **Accessories and bundles are distinct cases:** An accessory should not be grouped with its primary product. Bundles or multipacks with unverified contents are treated conservatively rather than assumed equivalent to a standalone item or another bundle.
+- **`uncertain` is a deliberate outcome:** The matcher does not force every pair into a match or non-match classification.
+
+**Outstanding team decision:** Whether color variants and refurbished/used condition should share a canonical parent product while remaining separate purchasable offers. This could alter the final labeling and grouping policy.
+
+**Current limitation:** If both offers omit the same important attribute, a matching identifier may still be sufficient for `match`. Category-specific completeness requirements must be agreed when the canonical `ProductOffer` schema is finalized.
 
 ## Data
 
-`evaluation/product_pairs.jsonl` contains **92 synthetic labeled pairs** derived from **48 synthetic base listings** in `evaluation/product_matching/mock_products.json`, plus eight intentionally difficult pair-only stress variations. No live API responses or real retailer identifiers were used.
+`evaluation/product_pairs.jsonl` contains **92 synthetic labeled product pairs**, derived from **48 synthetic base listings** in `evaluation/product_matching/mock_products.json` and additional pair-level stress variations. No live retailer API responses or real retailer identifiers were used.
 
-- Development: 60 pairs from 8 product families.
-- Holdout: 32 pairs from 4 different product families.
-- The holdout contains 14 positive matches and 18 non-matches.
-- All example GTINs and MPNs are invented. Synthetic GTINs pass checksum format validation; a valid checksum is **not** proof that a GTIN has been assigned to a real item.
-- Product families are split so repeated titles of the same model cannot leak between development and holdout.
+| Dataset split | Pairs | Positive labels | Negative labels | Product families | Current role |
+|---|---:|---:|---:|---:|---|
+| Development | 60 | 26 | 34 | 8 | Development and regression analysis |
+| Original holdout | 32 | 14 | 18 | 4 | **Diagnostic fixtures only** |
+| **Total** | **92** | **40** | **52** | **12** | Synthetic evaluation suite |
 
-## Baseline method
+The original family-based split avoided overlap between development and original holdout families. However, **the original holdout examples were subsequently inspected during matcher development**, so that split is no longer independent for the revised implementation.
 
-1. Normalize brands/models/MPNs and variant attribute values by case-folding and stripping spacing/punctuation.
-2. Validate GTIN-8/12/13/14 checksums and compare valid GTINs in padded GTIN-14 form.
-3. Reject obvious brand, model or known-variant conflicts (`non_match`).
-4. Conflicting valid GTINs or conflicting brand-scoped MPNs yield `uncertain` unless a stronger mismatch is already known.
-5. Accept consistent matching GTINs; otherwise accept consistent brand + MPN.
-6. As a fallback with missing IDs, require matching normalized brand/model, complete symmetric variant coverage and at least one distinguishing attribute beyond condition.
-7. Ignore `price_usd` and retailer names as product identity signals.
+All example GTINs and MPNs are invented. A valid GTIN checksum establishes only checksum validity; it does **not** prove that the number has been assigned to a real product.
 
-The input is a provisional ProductOffer-like dictionary, **not** a finalized backend schema. When W1-12 is finalized, a thin input adapter should translate from `backend/app/schemas/product.py` into this matcher.
+## Baseline Method
 
-## Local synthetic evaluation
+The matcher is implemented in `evaluation/product_matching/baseline.py` and returns one of `match`, `non_match`, or `uncertain`, alongside a reason and evidence category.
 
-Commands:
+1. Normalize brands, models, MPNs, and structured variant values using case-folding and punctuation/whitespace removal.
+2. Validate GTIN-8/12/13/14 checksums and compare valid identifiers in zero-padded GTIN-14 form.
+3. Check product-title information against structured RAM and storage values; return `uncertain` for detected contradictions.
+4. Distinguish accessories, standalone products, and bundles/multipacks using conservative title-based signals. Prevent accessory-to-product matches, and abstain when bundle contents cannot be verified.
+5. Reject explicit brand, model, and shared-variant conflicts as `non_match`.
+6. Return `uncertain` for conflicting valid GTINs or conflicting brand-scoped MPNs.
+7. **Before accepting a GTIN or MPN match**, check that both offers provide the same set of variant fields; if a field is missing on one side, return `uncertain`.
+8. Accept consistent matching GTINs, or consistent brand-scoped MPNs, when no earlier conflict or incompleteness rule applies.
+9. When identifiers are insufficient, require consistent normalized brand/model, symmetric variant coverage, and at least one identifying variant beyond condition.
+10. Do not use retailer name or price as product identity evidence.
+
+The input is a provisional `ProductOffer`-like dictionary, **not** the finalized backend schema. After W1-12 is finalized, an adapter should map canonical `ProductOffer` records into the matcher without silently inventing missing attributes.
+
+## Local Validation and Testing
+
+Run the following commands from the repository root:
 
 ```bash
-python evaluation/product_matching/validate_dataset.py
-python -m unittest discover -s evaluation/product_matching -p 'test_*.py' -v
-python evaluation/product_matching/evaluate.py --split holdout --output evaluation/product_matching/results_holdout.json
+python3 evaluation/product_matching/validate_dataset.py
+python3 -m unittest discover -s evaluation/product_matching -p "test_*.py" -v
+python3 evaluation/product_matching/evaluate.py --split development
+python3 evaluation/product_matching/evaluate.py --split holdout
 ```
 
-**Holdout:** 32 pairs, TP=12, FP=2, FN=2, TN=16. Precision **0.8571**, recall **0.8571**, F1 **0.8571**. One pair produced `uncertain` (automatic-decision coverage **0.9688**). `uncertain` is treated as not matched for binary metrics, and is separately counted. See `results_holdout.json` for examples.
+**Verified local results (latest review changes):**
 
-**Do not present this as an estimated real-world accuracy.** The examples are synthetic and biased towards fields expected by the algorithm. Metrics here primarily show behavior, demonstrate the evaluation harness and identify known failure modes.
+- Dataset validator passed: 48 base listings and 92 labeled pairs.
+- **27/27 unit tests passed**: 14 original tests, 5 missing-variant policy tests, and 8 accessory/bundle tests.
+- Development metrics remained unchanged after the review fixes.
 
+### Synthetic Development Evaluation
 
-### Updated Development Evaluation
-
-Following the initial evaluation, three safeguards were introduced:
-
-1. Accessory detection to prevent accessories from being
-   incorrectly grouped with their parent products.
-2. RAM consistency validation between product titles
-   and structured attributes.
-3. Storage consistency validation to detect stale or
-   contradictory product specifications.
-
-The updated baseline was evaluated on 60 synthetic
-development pairs.
+The following results are from **60 synthetic development pairs**:
 
 | Metric | Result |
-|---|---|
-| Precision | 100.00% |
-| Recall | 92.31% |
-| F1-score | 96.00% |
-| True positives | 24 |
-| False positives | 0 |
-| False negatives | 2 |
-| True negatives | 34 |
-| Automatic-decision coverage | 95.00% |
+|---|---:|
+| True positives (TP) | 24 |
+| False positives (FP) | 0 |
+| False negatives (FN) | 2 |
+| True negatives (TN) | 34 |
+| Precision | **100.00%** |
+| Recall | **92.31%** |
+| F1-score | **96.00%** |
+| Automatic-decision coverage | **95.00%** |
+| Decisions: `match` / `non_match` / `uncertain` | 24 / 33 / 3 |
 
-All 14 automated unit tests passed.
+Three pairs received `uncertain` decisions:
 
-Three pairs received an uncertain decision:
-- Missing color information
-- Conflicting valid GTINs
-- Contradictory title and structured storage attributes
+- `stress_dev_missing_color`: one listing lacks a variant attribute.
+- `stress_dev_conflicting_gtin`: two valid GTINs conflict.
+- `stress_dev_stale_parsed_storage`: title storage contradicts a structured storage value.
 
-The updated storage safeguard prevented the previously
-observed false-positive match involving inconsistent
-storage specifications.
+For binary scoring, `uncertain` is treated as **not matched**, while abstentions are separately counted in decision coverage. Thus, an abstention on a truly matching pair contributes to false negatives under this evaluation protocol.
 
-These results reflect synthetic development data only.
-They are not estimates of real-world matching performance.
+**These figures describe synthetic development fixtures only. They are not real-retailer accuracy estimates.**
 
-The original holdout examples were inspected during
-development, so that split can no longer be considered
-fully independent for evaluating the revised matcher.
-A new independently labeled retailer sample is required
-before making production-level accuracy claims.
+### Original Holdout — Diagnostic Evaluation Only
 
-## Example errors and non-match safeguards
+The original synthetic holdout consists of **32 labeled pairs across four product families**. Although it was initially reserved for evaluation, examples from this split were examined and used to guide subsequent matcher changes. Consequently, the set is **not an independent holdout for the current matcher**. The results below are retained only for regression diagnosis and error analysis.
 
-| Holdout example | Gold label | Baseline | Lesson |
+**Latest local evaluation of the current matcher:**
+
+| Metric | Result |
+|---|---:|
+| Evaluated pairs | 32 |
+| True positives (TP) | 12 |
+| False positives (FP) | 1 |
+| False negatives (FN) | 2 |
+| True negatives (TN) | 17 |
+| Precision | **92.31%** |
+| Recall | **85.71%** |
+| F1-score | **88.89%** |
+| Automatic-decision coverage | **96.88%** |
+| Decisions: `match` / `non_match` / `uncertain` | 13 / 18 / 1 |
+
+**Current diagnostic cases:**
+
+| Pair ID | True label | Current decision | Interpretation |
 |---|---|---|---|
-| `stress_holdout_accessory` | non-match | match | If normalization wrongly labels an accessory as its parent product, trusted structured attributes can cause false positives. Need accessory/bundle checks. |
-| `stress_holdout_missing_model` | match | uncertain | Sparse API responses can reduce recall; consider safe additional evidence. |
-| `stress_holdout_model_alias` | match | non-match | Simple exact normalized model strings miss valid aliases; consider a maintained alias table or text/embedding candidate retrieval. |
-| `stress_holdout_stale_ram` | non-match | match | Stale or incorrect structured memory attributes can produce incorrect merges. Cross-check title-extracted variant tokens. |
+| `stress_holdout_missing_model` | Match | `uncertain` | Sparse identity fields reduce recall. |
+| `stress_holdout_model_alias` | Match | `non_match` | Exact normalized model comparison misses a valid alias. |
+| `stress_holdout_stale_ram` | Non-match | `match` | A stale or incorrect RAM-related field can still produce a false-positive merge. |
 
-Existing safeguards block explicit model/version, storage, condition, color, edition and connector disagreements; conflicting high-confidence product identifiers trigger review.
+The previous stored holdout results came from an earlier baseline and must be replaced with the current output. To regenerate the JSON file using the present matcher:
 
-## BGE-M3 and reranker feasibility
+```bash
+python3 evaluation/product_matching/evaluate.py --split holdout > evaluation/product_matching/results_holdout.json
+```
 
-The [BAAI BGE-M3 model card](https://huggingface.co/BAAI/bge-m3) describes a multilingual embedding model supporting dense, sparse and multi-vector retrieval. The [BGE project documentation](https://bge-model.com/bge/bge_m3) lists a large model footprint (about 569M parameters and 2.27GB model size), which adds deployment and evaluation complexity. The model is **not installed or benchmarked in this starter**.
+Older results remain accessible through Git history, but **must not be presented as current matcher performance**. The diagnostic numbers above are neither unbiased accuracy estimates nor evidence of live API performance.
 
-**Possible value:** Improve candidate discovery when model aliases or noisy retailer descriptions prevent exact matching. A reranker may improve ranking of candidate matches after retrieval.
+## Review Changes and Remaining Limitations
 
-**Critical risk:** Semantic similarity is not the same as SKU/variant identity. Embeddings can rank the 128GB and 256GB versions very close; a rule-based variant-conflict gate should remain authoritative regardless of similarity score.
+The latest review changes include:
 
-**Recommendation for P0:** Start with exact IDs + conservative normalized attributes, error logging and an explicit `uncertain` outcome. Do **not** add BGE-M3 as a P0 dependency on the basis of synthetic data alone. Revisit embeddings after labeling representative retailer offers and measuring failure modes, precision/recall impact, latency and memory. If aliases dominate false negatives, first test a small alias dictionary; then benchmark an embedding + reranking approach with the same untouched holdout protocol.
+1. **Incomplete variant coverage:** Moved the one-sided missing-variant check before successful GTIN/MPN acceptance; added five regression tests.
+2. **Accessory and bundle handling:** Expanded accessory recognition and introduced conservative handling for bundles/multipacks; added eight regression tests.
+3. **Result reproducibility:** Re-evaluated the original 32-pair diagnostic set using the current matcher and documented the updated metrics.
+4. **Evaluation integrity:** Explicitly reclassified the previously inspected holdout as diagnostic rather than independent.
 
-## Next steps to complete W1-25 with realistic evidence
+Known limitations:
 
-1. Confirm match policy for color, condition and bundles with PM/Data Science.
-2. Obtain the canonical ProductOffer schema from W1-12 and representative source payloads/mock adapter fixtures.
-3. Independently label a realistic sample of same-product, different-variant and accessory pairs. Keep it separate from synthetic examples.
-4. Run the unchanged baseline against that new holdout and inspect false-positive merges before deciding on embeddings.
-5. Add a small integration adapter only after coordinating with backend owners; no API keys or live scraper access are required for this evaluation.
+- Both listings may omit the same critical attribute; category-aware completeness requirements have not yet been established.
+- Title-based accessory/bundle rules are heuristic and cannot guarantee comprehensive classification of retailer descriptions.
+- Model aliases can cause false negatives.
+- Inconsistent or stale RAM data can still cause false-positive matches.
+- The current tests cover invented, structured examples rather than typical retailer API data quality.
 
-## Deliverable locations
+## BGE-M3 and Reranker Feasibility
 
-- Dataset: `evaluation/product_pairs.jsonl`
-- Baseline code/tests/fixtures/results: `evaluation/product_matching/`
-- This report: `docs/matching-baseline.md`
+The [BAAI BGE-M3 model card](https://huggingface.co/BAAI/bge-m3) describes a multilingual embedding model supporting dense, sparse, and multi-vector retrieval. The [BGE project documentation](https://bge-model.com/bge/bge_m3) describes its architecture and deployment considerations. **BGE-M3 has not been installed or benchmarked for this project.**
+
+**Potential benefit:** Embeddings may help discover candidate pairs despite model aliases, incomplete product names, and noisy retailer titles. A reranker may improve prioritization of candidates after retrieval.
+
+**Key risk:** Semantic similarity does not establish exact SKU or offer equivalence. Closely related variants (for example, 128GB versus 256GB) may have similar descriptions while requiring a `non_match`. Identifier and variant-conflict checks should remain authoritative.
+
+**P0 recommendation:** Retain the explainable identifier- and attribute-based baseline with explicit abstention and error logging. Do **not** introduce BGE-M3 as a P0 dependency based solely on synthetic data. Reconsider alias dictionaries, embedding retrieval, or reranking after representative independent retailer data identifies the dominant failure modes and allows precision, recall, latency, and memory comparisons.
+
+## Next Steps for Independent Real-Retailer Evaluation
+
+1. Confirm the canonical matching policy for color, condition, accessories, bundles, and offer-level versus parent-product grouping with PM/Data Science.
+2. Obtain the finalized W1-12 `ProductOffer` schema and sample source payloads to build a transparent input adapter.
+3. Source retailer records through authorized APIs, permitted datasets, or otherwise appropriately licensed sources. Record provenance, access restrictions, and rate limits.
+4. Have product pairs independently labeled without using the matcher predictions as the labeling authority; include same-product, different-variant, accessory, bundle, and sparse-field cases.
+5. Freeze the matcher and evaluation protocol **before** running the new independent dataset. Report precision, recall, F1, abstention coverage, and false-positive merges separately.
+6. Consider aliases or embeddings only after reviewing actual real-data errors; benchmark any proposed improvement on a fresh untouched evaluation set.
+
+The historical Web Data Commons product-matching corpus may provide a useful additional external benchmark, but it is **not equivalent to a live 2026 retailer API evaluation**. No independent real-retailer results are claimed in this report.
+
+## Deliverable Locations
+
+- Synthetic labeled dataset: `evaluation/product_pairs.jsonl`
+- Base synthetic listings: `evaluation/product_matching/mock_products.json`
+- Matcher and unit tests: `evaluation/product_matching/`
+- Development evaluation: `evaluation/product_matching/results_development.json`
+- Current diagnostic results: `evaluation/product_matching/results_holdout.json`
+- Technical report: `docs/matching-baseline.md`
+
+---
+
+**Interpretation:** W1-25 has a functioning, regression-tested synthetic baseline. Independent real-retailer evaluation and final integration-policy decisions remain open.
