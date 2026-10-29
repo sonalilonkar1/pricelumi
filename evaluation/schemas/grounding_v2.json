@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "selected_offer_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "checkout_total_usd": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "requires_user_approval": {
+      "type": "boolean"
+    },
+    "coverage_incomplete": {
+      "type": "boolean"
+    },
+    "explanation": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "selected_offer_id",
+    "checkout_total_usd",
+    "requires_user_approval",
+    "coverage_incomplete",
+    "explanation"
+  ],
+  "additionalProperties": false
+}

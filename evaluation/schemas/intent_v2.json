@@ -1,0 +1,147 @@
+{
+  "type": "object",
+  "properties": {
+    "category": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Use literal user category; normalized values include television, laptop, headphones, monitor, tablet, vacuum, smartphone."
+    },
+    "brand": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "display_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "color": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resolution": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "delivery_by": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "required_condition": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "new",
+        "used",
+        "refurbished",
+        null
+      ]
+    },
+    "max_budget_usd": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "screen_size_inches": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "ram_gb": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "storage_gb": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "min_return_days": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "free_shipping_required": {
+      "type": "boolean"
+    },
+    "new_only": {
+      "type": "boolean"
+    },
+    "total_budget_includes_tax_shipping": {
+      "type": "boolean"
+    },
+    "needs_clarification": {
+      "type": "boolean"
+    },
+    "requested_auto_purchase": {
+      "type": "boolean"
+    },
+    "exclude_retailers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "excluded_conditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "excluded_models": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "category",
+    "brand",
+    "model",
+    "display_type",
+    "color",
+    "resolution",
+    "delivery_by",
+    "required_condition",
+    "max_budget_usd",
+    "screen_size_inches",
+    "ram_gb",
+    "storage_gb",
+    "min_return_days",
+    "free_shipping_required",
+    "new_only",
+    "total_budget_includes_tax_shipping",
+    "needs_clarification",
+    "requested_auto_purchase",
+    "exclude_retailers",
+    "excluded_conditions",
+    "excluded_models"
+  ],
+  "additionalProperties": false
+}

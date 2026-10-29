@@ -1,0 +1,56 @@
+{
+  "tools": [
+    {
+      "name": "search_products",
+      "description": "Search catalog; read only.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_product_details",
+      "description": "Get details for previously found product ID; read only.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "product_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_shipping_estimate",
+      "description": "Get shipping estimate for known product and ZIP; read only.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "destination_zip": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "product_id",
+          "destination_zip"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}
